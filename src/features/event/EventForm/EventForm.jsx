@@ -39,16 +39,20 @@ const actions = {
 };
 
 const category = [
-  { key: 'drinks', text: 'Drinks', value: 'drinks' },
-  { key: 'culture', text: 'Culture', value: 'culture' },
-  { key: 'film', text: 'Film', value: 'film' },
-  { key: 'food', text: 'Food', value: 'food' },
-  { key: 'music', text: 'Music', value: 'music' },
-  { key: 'travel', text: 'Travel', value: 'travel' }
+  { key: 'physics', text: 'physics', value: 'physics' },
+  { key: 'chemistry', text: 'Chemistry', value: 'chemistry' },
+  { key: 'biology', text: 'Biology', value: 'biology' },
+  { key: 'maths', text: 'Maths', value: 'maths' },
+  { key: 'english', text: 'English', value: 'english' },
+  { key: 'commerce', text: 'Commerce', value: 'commerce' },
+  { key: 'csc', text: 'Csc', value: 'csc' },
+  { key: 'Economics', text: 'Ecnomics', value: 'Econimics' },
+  { key: 'noneOfThese', text: 'NoneOfThese', value: 'noneOfThese' },
+
 ];
 
 const validate = combineValidators({
-  title: isRequired({ message: 'The event title is required' }),
+  title: isRequired({ message: 'The archive title is required' }),
   category: isRequired({ message: 'Please provide a category' }),
   description: composeValidators(
     isRequired({ message: 'Please enter a description' }),
@@ -130,35 +134,35 @@ class EventForm extends Component {
         />
         <Grid.Column width={10}>
           <Segment>
-            <Header sub color="teal" content="Event Details" />
+            <Header sub color="teal" content="Archive Details" />
             <Form onSubmit={this.props.handleSubmit(this.onFormSubmit)}>
               <Field
                 name="title"
                 type="text"
                 component={TextInput}
-                placeholder="Give your event a name"
+                placeholder="Give your archive a name"
               />
               <Field
                 name="category"
                 type="text"
                 component={SelectInput}
                 options={category}
-                placeholder="What is your event about"
+                placeholder="What is your archive about"
               />
               <Field
                 name="description"
                 type="text"
                 component={TextArea}
                 rows={3}
-                placeholder="Tell us about your event"
+                placeholder="Tell us about your archive"
               />
-              <Header sub color="teal" content="Event Location details" />
+              <Header sub color="teal" content="Name of school" />
               <Field
                 name="city"
                 type="text"
                 component={PlaceInput}
                 options={{ types: ['(cities)'] }}
-                placeholder="Event city"
+                placeholder="Archive city"
                 onSelect={this.handleCitySelect}
               />
               {this.state.scriptLoaded && (
@@ -171,7 +175,7 @@ class EventForm extends Component {
                     radius: 1000,
                     types: ['establishment']
                   }}
-                  placeholder="Event venue"
+                  placeholder="School location"
                   onSelect={this.handleVenueSelect}
                 />
               )}
@@ -182,7 +186,7 @@ class EventForm extends Component {
                 dateFormat="YYYY-MM-DD HH:mm"
                 timeFormat="HH:mm"
                 showTimeSelect
-                placeholder="Date and time of event"
+                placeholder="Date and time of submittion"
               />
               <Button
                 disabled={invalid || submitting || pristine}
@@ -199,7 +203,7 @@ class EventForm extends Component {
                 type='button'
                 color={event.cancelled ? 'green' : 'red'}
                 floated='right'
-                content={event.cancelled ? 'Reactivate Event' : 'Cancel Event'}
+                content={event.cancelled ? 'Reactivate archive' : 'Cancel Archive'}
               />
             </Form>
           </Segment>

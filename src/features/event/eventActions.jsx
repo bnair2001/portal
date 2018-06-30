@@ -30,7 +30,7 @@ export const createEvent = event => {
         eventDate: event.date,
         host: true
       });
-      toastr.success('Success', 'Event has been created');
+      toastr.success('Success', 'Archive has been created');
     } catch (error) {
       toastr.error('Oops', 'Something went wrong');
     }
@@ -46,7 +46,7 @@ export const updateEvent = event => {
     }
     try {
       await firestore.update(`events/${event.id}`, event);
-      toastr.success('Success', 'Event has been updated');
+      toastr.success('Success', 'Archive has been updated');
     } catch (error) {
       console.log(error);
       toastr.error('Oops', 'Something went wrong');
@@ -61,8 +61,8 @@ export const cancelToggle = (cancelled, eventId) => async (
 ) => {
   const firestore = getFirestore();
   const message = cancelled
-    ? 'Are you sure you want to cancel the event?'
-    : 'This reactivate the event - are you sure?';
+    ? 'Are you sure you want to cancel the Archive?'
+    : 'This reactivate the archive - are you sure?';
   try {
     toastr.confirm(message, {
       onOk: () =>
