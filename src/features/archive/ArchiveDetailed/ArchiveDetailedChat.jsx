@@ -1,7 +1,7 @@
 import React from 'react';
 import { Segment, Header, Comment, Form, Button } from 'semantic-ui-react';
 
-const EventDetailedChat = () => {
+const ArchiveDetailedChat = () => {
   return (
     <div>
       <Segment
@@ -11,7 +11,7 @@ const EventDetailedChat = () => {
         color="teal"
         style={{ border: 'none' }}
       >
-        <Header>Chat about this event</Header>
+        <Header>Chat about this archive</Header>
       </Segment>
 
       <Segment attached>
@@ -92,4 +92,4 @@ const EventDetailedChat = () => {
   );
 };
 
-export default EventDetailedChat;
+export default ArchiveDetailedChat;

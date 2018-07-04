@@ -1,5 +1,5 @@
 import { createReducer } from '../../app/common/util/reducerUtil';
-import { CREATE_EVENT, DELETE_EVENT, UPDATE_EVENT } from './eventConstants';
+import { CREATE_ARCHIVE, DELETE_ARCHIVE, UPDATE_ARCHIVE } from './archiveConstants';
 
 const initialState = [
   {
@@ -52,25 +52,25 @@ const initialState = [
   }
 ];
 
-export const createEvent = (state, payload) => {
-  return [...state, Object.assign({}, payload.event)]
+export const createArchive = (state, payload) => {
+  return [...state, Object.assign({}, payload.archive)]
 }
 
-export const updateEvent = (state, payload) => {
+export const updateArchive = (state, payload) => {
   return [
-    ...state.filter(event => event.id !== payload.event.id),
-    Object.assign({}, payload.event)
+    ...state.filter(archive => archive.id !== payload.archive.id),
+    Object.assign({}, payload.archive)
   ]
 }
 
-export const deleteEvent = (state, payload) => {
+export const deleteArchive = (state, payload) => {
   return [
-    ...state.filter(event => event.id !== payload.eventId)
+    ...state.filter(archive => archive.id !== payload.archiveId)
   ]
 }
 
 export default createReducer(initialState, {
-  [CREATE_EVENT]: createEvent,
-  [UPDATE_EVENT]: updateEvent,
-  [DELETE_EVENT]: deleteEvent
+  [CREATE_ARCHIVE]: createArchive,
+  [UPDATE_ARCHIVE]: updateArchive,
+  [DELETE_ARCHIVE]: deleteArchive
 })

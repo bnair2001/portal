@@ -2,11 +2,11 @@ import React from 'react';
 import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 
-const eventImageStyle = {
+const archiveImageStyle = {
     filter: 'brightness(30%)'
 };
 
-const eventImageTextStyle = {
+const archiveImageTextStyle = {
     position: 'absolute',
     bottom: '5%',
     left: '5%',
@@ -15,24 +15,24 @@ const eventImageTextStyle = {
     color: 'white'
 };
 
-const EventDetailedHeader = ({event}) => {
+const ArchiveDetailedHeader = ({archive}) => {
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: '0' }}>
-        <Image src={`/assets/categoryImages/${event.category}.jpg`} fluid style={eventImageStyle} />
+        <Image src={`/assets/categoryImages/${archive.category}.jpg`} fluid style={archiveImageStyle} />
 
-        <Segment basic style={eventImageTextStyle}>
+        <Segment basic style={archiveImageTextStyle}>
         <Item.Group>
             <Item>
               <Item.Content>
                 <Header
                   size="huge"
-                  content={event.title}
+                  content={archive.title}
                   style={{ color: 'white' }}
                 />
-                <p>{event.date}</p>
+                <p>{archive.date}</p>
                 <p>
-                  Hosted by <strong>{event.hostedBy}</strong>
+                  Hosted by <strong>{archive.hostedBy}</strong>
                 </p>
               </Item.Content>
             </Item>
@@ -41,15 +41,15 @@ const EventDetailedHeader = ({event}) => {
       </Segment>
 
       <Segment attached="bottom">
-        <Button>Cancel My Place</Button>
-        <Button color="teal">JOIN THIS EVENT</Button>
+        <Button>Cancel Archive</Button>
+        <Button color="teal">JOIN THIS ARCHIVE</Button>
 
-        <Button as={Link} to={`/manage/${event.id}`} color="orange" floated="right">
-          Manage Event
+        <Button as={Link} to={`/manage/${archive.id}`} color="orange" floated="right">
+          Manage Archive
         </Button>
       </Segment>
     </Segment.Group>
   );
 };
 
-export default EventDetailedHeader;
+export default ArchiveDetailedHeader;

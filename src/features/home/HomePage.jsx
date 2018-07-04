@@ -13,7 +13,7 @@ const HomePage = ({history}) => {
             />
             <div className="content">The Portal</div>
           </h1>
-          <h2>tagline comes here</h2>
+          <h2>Structured learning made easy</h2>
           <div onClick={() => history.push('/events')} className="ui huge white inverted button">
             Get Started
             <i className="right arrow icon" />
@@ -21,8 +21,7 @@ const HomePage = ({history}) => {
         </div>
       </div>
       <div style={{ textAlign: 'center' }}>
-       The Portal &copy;
-      
+        
       </div>
     </div>
   );

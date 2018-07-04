@@ -1,50 +1,59 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withFirebase } from 'react-redux-firebase'
 import { Menu, Container, Button } from 'semantic-ui-react';
 import { NavLink, Link, withRouter } from 'react-router-dom';
 import SignedOutMenu from '../Menus/SignedOutMenu';
 import SignedInMenu from '../Menus/SignedInMenu';
-import { openModal } from '../../modals/modalActions'
-
-const actions = {
-  openModal
-}
-
-const mapState = (state) => ({
-  auth: state.firebase.auth,
-  profile: state.firebase.profile
-})
 
 class NavBar extends Component {
-
-  handleSignIn = () => {
-    this.props.openModal('LoginModal')
+  state = {
+    authenticated: false
   };
 
-  handleRegister = () => {
-    this.props.openModal('RegisterModal')
-  }
+  handleSignIn = () => {
+    this.setState({
+      authenticated: true
+    });
+  };
 
   handleSignOut = () => {
-    this.props.firebase.logout();
+    this.setState({
+      authenticated: false
+    });
     this.props.history.push('/')
   };
 
   render() {
-    const { auth, profile} = this.props;
-    const authenticated = auth.isLoaded && !auth.isEmpty
+    const { authenticated } = this.state;
     return (
       <Menu inverted fixed="top">
         <Container>
           <Menu.Item as={Link} to="/" header>
-            <img src="/assets/logo.png" alt="logo" />
+            <img src="/assets/logo.png#" alt="logo" />
             The Portal
           </Menu.Item>
-          <Menu.Item as={NavLink} to="/events" name="Archives" />
-          <Menu.Item as={NavLink} to="/test" name="....." />
+          
+          {authenticated &&
+          <Menu.Item as={NavLink} to="/test" name="Archives" />}
+          {authenticated &&
+          <Menu.Item as={NavLink} to="/events" name="Events" />}
           {authenticated &&
           <Menu.Item as={NavLink} to="/people" name="People" />}
+
+          {authenticated &&
+          <Menu.Item>
+            <Button
+              as={Link}
+              to="/createArchive"
+              floated="right"
+              positive
+              inverted
+              content="Create Archive"
+            />
+          </Menu.Item>}
+
+
+
+
 
           {authenticated &&
           <Menu.Item>
@@ -54,13 +63,13 @@ class NavBar extends Component {
               floated="right"
               positive
               inverted
-              content="Create Archive"
+              content="Create Event"
             />
           </Menu.Item>}
           {authenticated ? (
-            <SignedInMenu auth={auth} profile={profile} signOut={this.handleSignOut} />
+            <SignedInMenu signOut={this.handleSignOut} />
           ) : (
-            <SignedOutMenu register={this.handleRegister} signIn={this.handleSignIn} />
+            <SignedOutMenu signIn={this.handleSignIn} />
           )}
         </Container>
       </Menu>
@@ -68,4 +77,4 @@ class NavBar extends Component {
   }
 }
 
-export default withRouter(withFirebase(connect(mapState, actions)(NavBar)));
+export default withRouter(NavBar);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Segment, List, Label, Item } from 'semantic-ui-react';
 
-const EventDetailedSidebar = ({ attendees }) => {
+const ArchiveDetailedSidebar = ({ attendees }) => {
   const isHost = false;
   return (
     <div>
@@ -42,4 +42,4 @@ const EventDetailedSidebar = ({ attendees }) => {
   );
 };
 
-export default EventDetailedSidebar;
+export default ArchiveDetailedSidebar;
