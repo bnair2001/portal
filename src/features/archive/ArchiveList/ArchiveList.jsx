@@ -6,7 +6,7 @@ class ArchiveList extends Component {
     const { archives, deleteArchive } = this.props;
     return (
       <div>
-        {archives.map(archive => (
+        {archives.map((archive) => (
           <ArchiveListItem
             key={archive.id}
             archive={archive}

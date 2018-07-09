@@ -5,7 +5,7 @@ import ArchiveDetailedHeader from './ArchiveDetailedHeader';
 import ArchiveDetailedInfo from './ArchiveDetailedInfo';
 import ArchiveDetailedChat from './ArchiveDetailedChat';
 import ArchiveDetailedSidebar from './ArchiveDetailedSidebar';
-
+import ArchiveData from './ArchiveData';
 const mapState = (state, ownProps) => {
   const archiveId = ownProps.match.params.id;
 
@@ -26,6 +26,7 @@ const ArchiveDetailedPage = ({archive}) => {
       <Grid.Column width={10}>
         <ArchiveDetailedHeader archive={archive} />
         <ArchiveDetailedInfo archive={archive} />
+        <ArchiveData archive={archive}/>
         <ArchiveDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>

@@ -26,4 +26,4 @@ const ModalManager = ({currentModal}) => {
   return <span>{renderedModal}</span>
 }
 
-export default connect(mapState)(ModalManager)
+export default connect(mapState)(ModalManager);

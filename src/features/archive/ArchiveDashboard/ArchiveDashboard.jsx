@@ -22,7 +22,7 @@ class ArchiveDashboard extends Component {
     return (
       <Grid>
         <Grid.Column width={10}>
-          <ArchiveList deleteArchive={this.handleDeleteArchive} Archives={Archives} />
+          <ArchiveList deleteArchive={this.handleDeleteArchive} archives={archives} />
         </Grid.Column>
         <Grid.Column width={6} />
       </Grid>

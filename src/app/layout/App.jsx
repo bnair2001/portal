@@ -9,12 +9,17 @@ import UserDetailedPage from '../../features/user/UserDetailed/UserDetailedPage'
 import PeopleDashboard from '../../features/user/PeopleDashboard/PeopleDashboard';
 import EventDetailedPage from '../../features/event/EventDetailed/EventDetailedPage';
 import HomePage from '../../features/home/HomePage';
-import TestComponent from '../../features/testarea/TestComponent';
+import  ModalManager  from "../../features/modals/ModalManager";
+
+import ArchiveDashboard from '../../features/archive/ArchiveDashboard/ArchiveDashboard';
+import ArchiveForm from '../../features/archive/ArchiveForm/ArchiveForm';
+import ArchiveDetailedPage from '../../features/archive/ArchiveDetailed/ArchiveDetailedPage';
 
 class App extends Component {
   render() {
     return (
       <div>
+        <ModalManager/>
         <Switch>
           <Route exact path="/" component={HomePage} />
         </Switch>
@@ -27,13 +32,15 @@ class App extends Component {
               <Container className="main">
                 <Switch>
                   <Route path="/events" component={EventDashboard} />
-                  <Route path="/test" component={TestComponent} />
+                  <Route path="/archives" component={ArchiveDashboard} />
                   <Route path="/event/:id" component={EventDetailedPage} />
                   <Route path="/manage/:id" component={EventForm} />
                   <Route path="/people" component={PeopleDashboard} />
                   <Route path="/profile/:id" component={UserDetailedPage} />
                   <Route path="/settings" component={SettingsDashboard} />
                   <Route path="/createEvent" component={EventForm} />
+                  <Route path="/createArchive" component={ArchiveForm} />
+                  <Route path="/archive/:id" component={ArchiveDetailedPage} />
                 </Switch>
               </Container>
             </div>
