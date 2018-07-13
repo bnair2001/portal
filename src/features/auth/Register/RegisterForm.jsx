@@ -26,12 +26,6 @@ const RegisterForm = () => {
             component={TextInput}
             placeholder="Password"
           />
-          <Field
-            name="type"
-            type="text"
-            component={TextInput}
-            placeholder="School/Teacher/Student"
-          />
           <Button fluid size="large" color="teal">
             Register
           </Button>
@@ -41,4 +35,4 @@ const RegisterForm = () => {
   );
 };
 
-export default reduxForm({form: 'registerForm'})(RegisterForm);
+export default reduxForm({form:'registerForm'}) (RegisterForm);

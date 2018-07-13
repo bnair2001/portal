@@ -5,9 +5,7 @@ import {connect} from 'react-redux';
 import LoginForm from '../auth/Login/LoginForm';
 import {closeModal} from "./modalActions";
 
-const actions = {
-    closeModal,
-};
+const actions = {closeModal};
 
 class LoginModal extends Component {
     render() {
@@ -18,7 +16,7 @@ class LoginModal extends Component {
                 onClose={this.props.closeModal}
             >
                 <Modal.Header>
-                    Login to Structured Learning!!
+                    Login to Structured Learning(a.k.a The Portal)
                 </Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
