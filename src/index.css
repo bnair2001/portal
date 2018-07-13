@@ -104,3 +104,7 @@ body {
   padding-bottom: 0 !important;
   padding-left: 2em !important;
 }
+
+.ui.basic.red.label {
+  color: white;
+}

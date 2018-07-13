@@ -4,8 +4,9 @@ import testReducer from '../../features/testarea/testReducer';
 import eventReducer from '../../features/event/eventReducer'
 import modalsReducer from "../../features/modals/modalReducer"
 import authReducer from "../../features/auth/authReducer";
-
+import archiveReducer from "../../features/archive/ArchiveReducer";
 const rootReducer = combineReducers({
+  archives: archiveReducer,
   test: testReducer,
   events: eventReducer,
   form: FormReducer,

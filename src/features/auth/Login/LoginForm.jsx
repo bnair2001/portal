@@ -19,7 +19,7 @@ const LoginForm = ({login, handleSubmit}) => {
         />
         <Field
           name="password"
-          component={TextInput}
+        component={TextInput}
           type="password"
           placeholder="password"
         />

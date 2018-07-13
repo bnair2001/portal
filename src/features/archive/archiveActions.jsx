@@ -1,8 +1,8 @@
-import { CREATE_EVENT, DELETE_EVENT, UPDATE_EVENT } from './archiveConstants';
+import { CREATE_ARCHIVE, DELETE_ARCHIVE, UPDATE_ARCHIVE } from './archiveConstants';
 
 export const createArchive = (archive) => {
   return {
-    type: CREATE_EVENT,
+    type: CREATE_ARCHIVE,
     payload: {
       archive
     }
@@ -11,7 +11,7 @@ export const createArchive = (archive) => {
 
 export const updateArchive = (archive) => {
   return {
-    type: UPDATE_EVENT,
+    type: UPDATE_ARCHIVE,
     payload: {
       archive
     }
@@ -20,7 +20,7 @@ export const updateArchive = (archive) => {
 
 export const deleteArchive = (archiveId) => {
   return {
-    type: DELETE_EVENT,
+    type: DELETE_ARCHIVE,
     payload: {
       archiveId
     }
