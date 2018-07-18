@@ -13,6 +13,7 @@ import ArchiveComponent from '../../features/archive/ArchiveDashboard/ArchiveDas
 import ModalManager from '../../features/modals/ModalManager';
 import ArchiveDetailed from '../../features/archive/ArchiveDetailed/ArchiveDetailedPage';
 import ArchiveForm from '../../features/archive/ArchiveForm/ArchiveForm';
+
 class App extends Component {
   render() {
     return (
@@ -34,7 +35,8 @@ class App extends Component {
                   <Route path="/archive/:id" component={ArchiveDetailed} />
                   <Route path="/createArchive" component={ArchiveForm} />
                   <Route path="/event/:id" component={EventDetailedPage} />
-                  <Route path="/manage/:id" component={EventForm} />
+                  <Route path="/manageEvent/:id" component={EventForm} />
+                  <Route path="/manageArchive/:id" component={ArchiveForm} />
                   <Route path="/people" component={PeopleDashboard} />
                   <Route path="/profile/:id" component={UserDetailedPage} />
                   <Route path="/settings" component={SettingsDashboard} />

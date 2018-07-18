@@ -44,7 +44,7 @@ const ArchiveDetailedHeader = ({archive}) => {
         <Button>Cancel Archive</Button>
         <Button color="teal">JOIN THIS ARCHIVE</Button>
 
-        <Button as={Link} to={`/manage/${archive.id}`} color="orange" floated="right">
+        <Button as={Link} to={`/manageArchive/${archive.id}`} color="orange" floated="right">
           Manage Archive
         </Button>
       </Segment>
