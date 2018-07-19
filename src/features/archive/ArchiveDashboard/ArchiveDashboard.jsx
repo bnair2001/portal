@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import { Grid } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import { deleteArchive } from '../archiveActions';
-import ArchiveList from '../ArchiveList/ArchiveList';
+import React, { Component } from "react";
+import { Grid } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { firestoreConnect } from "react-redux-firebase";
+import { deleteArchive } from "../archiveActions";
+import ArchiveList from "../ArchiveList/ArchiveList";
 
 const mapState = state => ({
-  archives: state.archives
+  archives: state.firestore.ordered.Archives
 });
 
 const actions = {
@@ -22,7 +23,10 @@ class ArchiveDashboard extends Component {
     return (
       <Grid>
         <Grid.Column width={10}>
-          <ArchiveList deleteArchive={this.handleDeleteArchive} archives={archives} />
+          <ArchiveList
+            deleteArchive={this.handleDeleteArchive}
+            archives={archives}
+          />
         </Grid.Column>
         <Grid.Column width={6} />
       </Grid>
@@ -30,4 +34,7 @@ class ArchiveDashboard extends Component {
   }
 }
 
-export default connect(mapState, actions)(ArchiveDashboard);
+export default connect(
+  mapState,
+  actions
+)(firestoreConnect([{ collection: "Archives" }])(ArchiveDashboard));

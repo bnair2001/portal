@@ -98,19 +98,7 @@ class ArchiveForm extends Component {
                 rows={3}
                 placeholder="Tell us about your archive"
               />
-              <Header sub color='teal' content='Archive Location details'/>
-              <Field
-                name="city"
-                type="text"
-                component={TextInput}
-                placeholder="Archive city"
-              />
-              <Field
-                name="venue"
-                type="text"
-                component={TextInput}
-                placeholder="Archive venue"
-              />
+              
               <Field
                 name="date"
                 type="text"
