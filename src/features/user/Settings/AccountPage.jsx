@@ -7,8 +7,8 @@ import TextInput from '../../../app/common/form/TextInput';
 const validate = combineValidators({
   newPassword1: isRequired({message: 'Please enter a password'}),
   newPassword2: composeValidators(
-    isRequired({message: 'Pls connfirm your password'}),
-    matchesField('newPassword1')({message: 'Paawords do not match'})
+    isRequired({message: 'Please connfirm your password'}),
+    matchesField('newPassword1')({message: 'Passwords do not match'})
   )()
 })
 const AccountPage = ({ error,invalid,submitting, handleSubmit, updatePassword}) => {

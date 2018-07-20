@@ -1,18 +1,19 @@
-import React, {Component} from 'react';
-import {Segment, Form, Header, Divider, Button} from 'semantic-ui-react';
-import {Field, reduxForm} from 'redux-form';
-import DateInput from "../../../app/common/form/DateInput";
-import PlaceInput from "../../../app/common/form/PlaceInput";
-import TextInput from "../../../app/common/form/TextInput";
-
+import React, { Component } from 'react';
+import { Segment, Form, Header, Divider, Button } from 'semantic-ui-react';
+import { Field, reduxForm } from 'redux-form';
+import moment from 'moment';
+import DateInput from '../../../app/common/form/DateInput';
+import PlaceInput from '../../../app/common/form/PlaceInput';
+import TextInput from '../../../app/common/form/TextInput';
+import RadioInput from '../../../app/common/form/RadioInput';
 class BasicPage extends Component {
 
     render() {
-        const {pristine, submitting} = this.props;
+        const {pristine, submitting, handleSubmit, updateProfile} = this.props;
         return (
             <Segment>
                 <Header dividing size='large' content='Basics' />
-                <Form>
+                <Form onSubmit={handleSubmit(updateProfile)}>
                     <Field
                         width={8}
                         name='displayName'
@@ -21,14 +22,35 @@ class BasicPage extends Component {
                         placeholder='Known As'
                     />
                     <Form.Group inline>
-                      {/* todo: Gender Radio button */}
+                      
+                          <label>Gender: </label>
+                          <Field
+                            name="gender"
+                            type="radio"
+                            value="male"
+                            label="Male"
+                            component={RadioInput}
+                          />
+                          <Field
+                            name="gender"
+                            type="radio"
+                            value="female"
+                            label="Female"
+                            component={RadioInput}
+                          />
+                      
                     </Form.Group>
                     <Field
-                        width={8}
-                        name='dateOfBirth'
-                        component={DateInput}
-                        placeholder='Date of Birth'
-                    />
+                            width={8}
+                            name="dateOfBirth"
+                            component={DateInput}
+                            dateFormat='YYYY-MM-DD'
+                            showYearDropdown={true}
+                            showMonthDropdown={true}
+                            dropdownMode='select'
+                            maxDate={moment().subtract(5, 'years')}
+                            placeholder="Date of Birth"
+          />
                     <Field
                         name='city'
                         placeholder='Home Town'
@@ -45,4 +67,4 @@ class BasicPage extends Component {
     }
 }
 
-export default reduxForm({form: 'userProfile', enableReinitialize: true})(BasicPage);
+export default reduxForm({form: 'userProfile', enableReinitialize: true, destroyOnUnmount: false})(BasicPage);
