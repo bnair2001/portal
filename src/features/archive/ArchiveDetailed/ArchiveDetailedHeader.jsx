@@ -1,6 +1,8 @@
 import React from 'react';
 import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import format from 'date-fns/format';
+
 
 const archiveImageStyle = {
     filter: 'brightness(30%)'
@@ -15,7 +17,11 @@ const archiveImageTextStyle = {
     color: 'white'
 };
 
-const ArchiveDetailedHeader = ({archive}) => {
+const ArchiveDetailedHeader = ({archive, isHost}) => {
+  let archiveDate;
+  if(archive.date){
+    archiveDate = archive.date.toDate();
+  }
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: '0' }}>
@@ -30,7 +36,7 @@ const ArchiveDetailedHeader = ({archive}) => {
                   content={archive.title}
                   style={{ color: 'white' }}
                 />
-                <p>{archive.date}</p>
+                <p>{format(archiveDate, 'dddd Do MMMM')}</p>
                 <p>
                   Hosted by <strong>{archive.hostedBy}</strong>
                 </p>
@@ -41,12 +47,17 @@ const ArchiveDetailedHeader = ({archive}) => {
       </Segment>
 
       <Segment attached="bottom">
-        <Button>Cancel Archive</Button>
-        <Button color="teal">JOIN THIS ARCHIVE</Button>
+        
 
-        <Button as={Link} to={`/manageArchive/${archive.id}`} color="orange" floated="right">
-          Manage Archive
-        </Button>
+        {isHost && (
+          <Button
+            as={Link}
+            to={`/manageArchive/${archive.id}`}
+            color="orange"
+          >
+            Manage Archive
+          </Button>
+        )}
       </Segment>
     </Segment.Group>
   );

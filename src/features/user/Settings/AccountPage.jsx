@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Header, Form, Divider, Label, Button, Icon } from 'semantic-ui-react';
+import { Segment, Header, Form, Divider, Label, Button } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import {combineValidators, matchesField, isRequired, composeValidators} from 'revalidate';
 import TextInput from '../../../app/common/form/TextInput';

@@ -25,3 +25,14 @@ export const createNewEvent = (user, photoURL, event) => {
     }
   }
 }
+export const createNewArchive = (user, photoURL, archive) => {
+  archive.date = moment(archive.date).toDate();
+  return {
+    ...archive,
+    hostUid: user.uid,
+    hostedBy: user.displayName,
+    hostPhotoURL: photoURL || '/assets/user.png',
+    created: Date.now(),
+    
+  }
+}

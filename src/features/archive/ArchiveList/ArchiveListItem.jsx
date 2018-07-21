@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Segment, Item, Icon, List, Button } from 'semantic-ui-react';
+import { Segment, Item, Icon, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
-import ArchiveListAttendee from './ArchiveListAttendee'
+
 import format from 'date-fns/format'
 class ArchiveListItem extends Component {
   render() {
@@ -15,7 +15,7 @@ class ArchiveListItem extends Component {
               <Item.Content>
                 <Item.Header as="a">{archive.title}</Item.Header>
                 <Item.Description>
-                  Hosted by <a>{archive.author}</a>
+                  Hosted by <a>{archive.hostedBy}</a>
                 </Item.Description>
               </Item.Content>
             </Item>
@@ -26,14 +26,7 @@ class ArchiveListItem extends Component {
             <Icon name="clock" />{format(archive.date.toDate(), 'dddd Do MMMM')} at {format(archive.date.toDate(), 'HH:mm')}
           </span>
         </Segment>
-        <Segment secondary>
-          <List horizontal>
-          {archive.attendees && Object.values(archive.attendees).map((attendee, index) => (
-            <ArchiveListAttendee key={index} attendee={attendee}/>
-          ))}
-
-          </List>
-        </Segment>
+        
         <Segment clearing>
         <span>{archive.description}</span>
           <Button onClick={deleteArchive(archive.id)} as="a" color="red" floated="right" content="Delete" />

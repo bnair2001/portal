@@ -1,14 +1,14 @@
 import React from 'react'
-import { Header, Segment, Sticky } from 'semantic-ui-react'
+import { Header, Segment } from 'semantic-ui-react'
 
 const EventActivity = () => {
   return (
-    <Sticky offset={100}>
+    <div>
       <Header attached='top' content='Recent Activity'/>
       <Segment attached>
-        <p>Recent archives</p>
+        <p>Recent activity</p>
       </Segment>
-    </Sticky>
+    </div>
   )
 }
 

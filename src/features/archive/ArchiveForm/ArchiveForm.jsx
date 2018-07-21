@@ -1,27 +1,33 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
-import moment from 'moment';
-import cuid from 'cuid';
-import { Segment, Form, Button, Grid, Header } from 'semantic-ui-react';
-import { composeValidators, combineValidators, isRequired, hasLengthGreaterThan } from 'revalidate'
-import { createArchive, updateArchive } from '../archiveActions';
-import TextInput from '../../../app/common/form/TextInput';
-import TextArea from '../../../app/common/form/TextArea';
-import SelectInput from '../../../app/common/form/SelectInput';
-import DateInput from '../../../app/common/form/DateInput';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { reduxForm, Field } from "redux-form";
 
-const mapState = (state, ownProps) => {
-  const archiveId = ownProps.match.params.id;
+import { withFirestore } from "react-redux-firebase";
+import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
+import {
+  composeValidators,
+  combineValidators,
+  isRequired,
+  hasLengthGreaterThan
+} from "revalidate";
+import { createArchive, updateArchive } from "../archiveActions";
+import TextInput from "../../../app/common/form/TextInput";
+import TextArea from "../../../app/common/form/TextArea";
+import SelectInput from "../../../app/common/form/SelectInput";
+import DateInput from "../../../app/common/form/DateInput";
+
+const mapState = state => {
+  
 
   let archive = {};
 
-  if (archiveId && state.archives.length > 0) {
-    archive = state.archives.filter(archive => archive.id === archiveId)[0];
+  if (state.firestore.ordered.Archives && state.firestore.ordered.Archives[0]) {
+    archive = state.firestore.ordered.Archives[0];
   }
 
   return {
-    initialValues: archive
+    initialValues: archive,
+    archive
   };
 };
 
@@ -31,52 +37,52 @@ const actions = {
 };
 
 const category = [
-    {key: 'drinks', text: 'Drinks', value: 'drinks'},
-    {key: 'culture', text: 'Culture', value: 'culture'},
-    {key: 'film', text: 'Film', value: 'film'},
-    {key: 'food', text: 'Food', value: 'food'},
-    {key: 'music', text: 'Music', value: 'music'},
-    {key: 'travel', text: 'Travel', value: 'travel'},
+  { key: "drinks", text: "Drinks", value: "drinks" },
+  { key: "culture", text: "Culture", value: "culture" },
+  { key: "film", text: "Film", value: "film" },
+  { key: "food", text: "Food", value: "food" },
+  { key: "music", text: "Music", value: "music" },
+  { key: "travel", text: "Travel", value: "travel" }
 ];
 
 const validate = combineValidators({
-  title: isRequired({message: 'The archive title is required'}),
-  category: isRequired({message: 'Please provide a category'}),
+  title: isRequired({ message: "The archive title is required" }),
+  category: isRequired({ message: "Please provide a category" }),
   description: composeValidators(
-    isRequired({message: 'Please enter a description'}),
-    hasLengthGreaterThan(4)({message: 'Description needs to be at least 5 characters'})
+    isRequired({ message: "Please enter a description" }),
+    hasLengthGreaterThan(4)({
+      message: "Description needs to be at least 5 characters"
+    })
   )(),
-  city: isRequired('city'),
-  venue: isRequired('venue'),
-  date: isRequired('date')
-})
+  city: isRequired("city"),
+  venue: isRequired("venue"),
+  date: isRequired("date")
+});
 
 class ArchiveForm extends Component {
-
   onFormSubmit = values => {
-    values.date = moment(values.date).format()
+    
     if (this.props.initialValues.id) {
       this.props.updateArchive(values);
       this.props.history.goBack();
     } else {
-      const newArchive = {
-        ...values,
-        id: cuid(),
-        hostPhotoURL: '/assets/user.png',
-        hostedBy: 'Bob'
-      };
-      this.props.createArchive(newArchive);
-      this.props.history.push('/archives');
+      this.props.createArchive(values);
+      this.props.history.push("/archives");
     }
   };
 
+  async componentDidMount() {
+    const {firestore, match} = this.props;
+    await firestore.setListener(`Archives/${match.params.id}`);
+  }
+
   render() {
-    const {invalid, submitting, pristine} = this.props;
+    const { invalid, submitting, pristine } = this.props;
     return (
       <Grid>
         <Grid.Column width={10}>
           <Segment>
-            <Header sub color='teal' content='Archive Details'/>
+            <Header sub color="teal" content="Archive Details" />
             <Form onSubmit={this.props.handleSubmit(this.onFormSubmit)}>
               <Field
                 name="title"
@@ -98,17 +104,21 @@ class ArchiveForm extends Component {
                 rows={3}
                 placeholder="Tell us about your archive"
               />
-              
+
               <Field
                 name="date"
                 type="text"
                 component={DateInput}
-                dateFormat='YYYY-MM-DD HH:mm'
-                timeFormat='HH:mm'
+                dateFormat="YYYY-MM-DD HH:mm"
+                timeFormat="HH:mm"
                 showTimeSelect
                 placeholder="Date and time of archive"
               />
-              <Button disabled={invalid || submitting || pristine} positive type="submit">
+              <Button
+                disabled={invalid || submitting || pristine}
+                positive
+                type="submit"
+              >
                 Submit
               </Button>
               <Button onClick={this.props.history.goBack} type="button">
@@ -122,6 +132,13 @@ class ArchiveForm extends Component {
   }
 }
 
-export default connect(mapState, actions)(
-  reduxForm({ form: 'archiveForm', enableReinitialize: true, validate })(ArchiveForm)
+export default withFirestore(
+  connect(
+    mapState,
+    actions
+  )(
+    reduxForm({ form: "archiveForm", enableReinitialize: true, validate })(
+      ArchiveForm
+    )
+  )
 );

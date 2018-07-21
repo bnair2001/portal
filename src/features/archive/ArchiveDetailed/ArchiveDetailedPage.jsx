@@ -1,38 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react'
 import { Grid } from 'semantic-ui-react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { withFirestore } from 'react-redux-firebase';
 import ArchiveDetailedHeader from './ArchiveDetailedHeader';
 import ArchiveDetailedInfo from './ArchiveDetailedInfo';
 import ArchiveDetailedChat from './ArchiveDetailedChat';
-import ArchiveDetailedSidebar from './ArchiveDetailedSidebar';
 
-const mapState = (state, ownProps) => {
-  const archiveId = ownProps.match.params.id;
 
+const mapState = state => {
+  
   let archive = {};
 
-  if (archiveId && state.archives.length > 0) {
-    archive = state.archives.filter(archive => archive.id === archiveId)[0]
+  if (state.firestore.ordered.Archives && state.firestore.ordered.Archives[0]) {
+    archive = state.firestore.ordered.Archives[0];
+    
   }
 
   return {
-    archive
+    archive,
+    auth:state.firebase.auth
   }
 }
 
-const ArchiveDetailedPage = ({archive}) => {
-  return (
-    <Grid>
-      <Grid.Column width={10}>
-        <ArchiveDetailedHeader archive={archive} />
+
+
+class ArchiveDetailedPage extends Component {
+  async componentDidMount() {
+    const { firestore, match } = this.props;
+    await firestore.setListener(`Archives/${match.params.id}`);
+    
+  }
+  render(){
+    const {archive,auth} = this.props;
+    const isHost = archive.hostUid === auth.uid;
+    return (
+      <Grid>
+      <Grid.Column width={12}>
+        <ArchiveDetailedHeader archive={archive}  isHost={isHost}/>
         <ArchiveDetailedInfo archive={archive} />
         <ArchiveDetailedChat />
       </Grid.Column>
-      <Grid.Column width={6}>
-        <ArchiveDetailedSidebar attendees={archive.attendees}/>
-      </Grid.Column>
+     
     </Grid>
-  );
-};
+    )
+  }
+}
 
-export default connect(mapState)(ArchiveDetailedPage);
+
+export default  withFirestore(connect(mapState)(ArchiveDetailedPage));

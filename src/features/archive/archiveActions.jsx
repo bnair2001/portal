@@ -1,34 +1,36 @@
 import { toastr } from "react-redux-toastr";
-import { CREATE_ARCHIVE, DELETE_ARCHIVE, UPDATE_ARCHIVE } from './archiveConstants';
-
+import {  DELETE_ARCHIVE } from './archiveConstants';
+import { createNewArchive } from '../../app/common/util/helpers';
+import moment from 'moment';
 export const createArchive = (archive) => {
-  return async dispatch => {
+ 
+  return async (dispatch, getState, { getFirestore }) => {
+    const firestore = getFirestore();
+    const user = firestore.auth().currentUser;
+    const photoURL = getState().firebase.profile.photoURL;
+    let newArchive = createNewArchive(user, photoURL, archive);
     try {
-      dispatch({
-        type: CREATE_ARCHIVE,
-        payload: {
-          archive
-        }
-      });
-      toastr.success('Success!','Archive has been created')
-    } catch(error) {
-      toastr.error('Oops','Something went wrong')
+      await firestore.add(`Archives`, newArchive);
+      toastr.success('Success', 'Event has been created');
+    } catch (error) {
+      toastr.error('Oops', 'Something went wrong');
     }
   };
 }
 
 export const updateArchive = (archive) => {
-  return async dispatch => {
+  return async (dispatch, getState, { getFirestore }) => {
+    const firestore = getFirestore();
+
+    if (archive.date !== getState().firestore.ordered.Archives[0].date) {
+      archive.date = moment(archive.date).toDate();
+    }
     try {
-      dispatch({
-        type: UPDATE_ARCHIVE,
-        payload: {
-          archive
-        }
-      });
-      toastr.success('Success!','Archive has been updated')
-    } catch(error) {
-      toastr.error('Oops','Something went wrong')
+      await firestore.update(`Archives/${archive.id}`, archive);
+      toastr.success('Success', 'Event has been updated');
+    } catch (error) {
+      console.log(error);
+      toastr.error('Oops', 'Something went wrong');
     }
   };
 }
