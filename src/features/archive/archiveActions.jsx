@@ -50,3 +50,24 @@ export const deleteArchive = (archiveId) => {
     }
   };
 }
+
+export const publishToggle = (published, ArchiveId) => async (
+  dispatch,
+  getState,
+  { getFirestore }
+) => {
+  const firestore = getFirestore();
+  const message = published
+    ? 'Are you sure you want to publish the event?'
+    : 'Are you sure you want to UN-publish the event?';
+  try {
+    toastr.confirm(message, {
+      onOk: () =>
+        firestore.update(`Archives/${ArchiveId}`, {
+          published: published
+        })
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

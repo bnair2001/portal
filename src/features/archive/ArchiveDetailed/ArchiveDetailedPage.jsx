@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { withFirestore } from 'react-redux-firebase';
+import { withFirestore, isLoaded, isEmpty } from 'react-redux-firebase';
 import ArchiveDetailedHeader from './ArchiveDetailedHeader';
 import ArchiveDetailedInfo from './ArchiveDetailedInfo';
 import ArchiveDetailedChat from './ArchiveDetailedChat';
-
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 const mapState = state => {
   
@@ -33,6 +33,7 @@ class ArchiveDetailedPage extends Component {
   render(){
     const {archive,auth} = this.props;
     const isHost = archive.hostUid === auth.uid;
+    if(!isLoaded(archive) || isEmpty(archive))return <LoadingComponent inverted={true} />
     return (
       <Grid>
       <Grid.Column width={12}>

@@ -10,39 +10,43 @@ import {
   isRequired,
   hasLengthGreaterThan
 } from "revalidate";
-import { createArchive, updateArchive } from "../archiveActions";
+import { createArchive, updateArchive, publishToggle} from "../archiveActions";
 import TextInput from "../../../app/common/form/TextInput";
 import TextArea from "../../../app/common/form/TextArea";
 import SelectInput from "../../../app/common/form/SelectInput";
 import DateInput from "../../../app/common/form/DateInput";
-
+import SelectOption from "../../../app/common/form/SelectOption";
 const mapState = state => {
   
-
+  let clean=true;
   let archive = {};
 
   if (state.firestore.ordered.Archives && state.firestore.ordered.Archives[0]) {
     archive = state.firestore.ordered.Archives[0];
+    clean=false;
   }
 
   return {
     initialValues: archive,
-    archive
+    archive,
+    clean
   };
 };
 
 const actions = {
   createArchive,
-  updateArchive
+  updateArchive,
+  publishToggle
 };
 
 const category = [
-  { key: "drinks", text: "Drinks", value: "drinks" },
-  { key: "culture", text: "Culture", value: "culture" },
-  { key: "film", text: "Film", value: "film" },
-  { key: "food", text: "Food", value: "food" },
-  { key: "music", text: "Music", value: "music" },
-  { key: "travel", text: "Travel", value: "travel" }
+  { key: "physics", text: "Physics", value: "physics" },
+  { key: "chemistry", text: "Chemistry", value: "chemistry" },
+  { key: "maths", text: "Mathematics", value: "maths" },
+  { key: "english", text: "English", value: "english" },
+  { key: "biology", text: "Biology", value: "biology" },
+  { key: "csc", text: "Computer Science", value: "csc" },
+  { key: "other", text: "others", value: "other" }
 ];
 
 const validate = combineValidators({
@@ -61,7 +65,7 @@ const validate = combineValidators({
 
 class ArchiveForm extends Component {
   onFormSubmit = values => {
-    
+    console.log(values);
     if (this.props.initialValues.id) {
       this.props.updateArchive(values);
       this.props.history.goBack();
@@ -75,9 +79,13 @@ class ArchiveForm extends Component {
     const {firestore, match} = this.props;
     await firestore.setListener(`Archives/${match.params.id}`);
   }
+  async componentWillUnmount() {
+    const {firestore, match} = this.props;
+    await firestore.unsetListener(`Archives/${match.params.id}`);
+  }
 
   render() {
-    const { invalid, submitting, pristine } = this.props;
+    const { invalid, submitting, pristine, archive, publishToggle, clean } = this.props;
     return (
       <Grid>
         <Grid.Column width={10}>
@@ -114,6 +122,15 @@ class ArchiveForm extends Component {
                 showTimeSelect
                 placeholder="Date and time of archive"
               />
+
+              {clean && 
+              <Field 
+                name="published"
+                type="text"
+                component={SelectOption}
+                placeholder="Publish immediately"
+              />
+              }
               <Button
                 disabled={invalid || submitting || pristine}
                 positive
@@ -124,6 +141,13 @@ class ArchiveForm extends Component {
               <Button onClick={this.props.history.goBack} type="button">
                 Cancel
               </Button>
+              {!clean && <Button
+                onClick={() => publishToggle(!archive.published, archive.id)}
+                type='button'
+                color={archive.published ? 'green' : 'red'}
+                floated='right'
+                content={archive.published ? 'Unpublish' : 'Publish'}
+              />}
             </Form>
           </Segment>
         </Grid.Column>

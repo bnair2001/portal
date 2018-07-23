@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import format from 'date-fns/format'
 class ArchiveListItem extends Component {
   render() {
-    const {archive, deleteArchive} = this.props
+    const {archive} = this.props
     return (
       <Segment.Group>
         <Segment>
@@ -13,9 +13,9 @@ class ArchiveListItem extends Component {
             <Item>
               <Item.Image size="tiny" circular src={archive.hostPhotoURL} />
               <Item.Content>
-                <Item.Header as="a">{archive.title}</Item.Header>
+                <Item.Header as={Link} to={`/archive/${archive.id}`}>{archive.title}</Item.Header>
                 <Item.Description>
-                  Hosted by <a>{archive.hostedBy}</a>
+                  Hosted by <Link to={`/profile/${archive.hostUid}`}>{archive.hostedBy}</Link>
                 </Item.Description>
               </Item.Content>
             </Item>
@@ -29,7 +29,7 @@ class ArchiveListItem extends Component {
         
         <Segment clearing>
         <span>{archive.description}</span>
-          <Button onClick={deleteArchive(archive.id)} as="a" color="red" floated="right" content="Delete" />
+         
           <Button as={Link} to={`/archive/${archive.id}`} color="teal" floated="right" content="View" />
         </Segment>
       </Segment.Group>

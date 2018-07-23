@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { firestoreConnect, isEmpty } from 'react-redux-firebase';
 import { compose } from 'redux'
 import UserDetailedHeader from './UserDetailedHeader'
-import UserDetailedDescription from './UserDetailedDescription'
+import UserDetailedDescription from './UserDetailedDescription' 
 import UserDetailedPhotos from './UserDetailedPhotos'
 import UserDetailedSidebar from './UserDetailedSidebar'
 import UserDetailedEvents from './UserDetailedEvents'

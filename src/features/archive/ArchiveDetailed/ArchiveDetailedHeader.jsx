@@ -5,7 +5,7 @@ import format from 'date-fns/format';
 
 
 const archiveImageStyle = {
-    filter: 'brightness(30%)'
+    filter: 'brightness(85%)'
 };
 
 const archiveImageTextStyle = {
@@ -25,7 +25,7 @@ const ArchiveDetailedHeader = ({archive, isHost}) => {
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: '0' }}>
-        <Image src={`/assets/categoryImages/${archive.category}.jpg`} fluid style={archiveImageStyle} />
+        <Image src={`/assets/categoryImages/${archive.category}.png`} fluid style={archiveImageStyle} />
 
         <Segment basic style={archiveImageTextStyle}>
         <Item.Group>

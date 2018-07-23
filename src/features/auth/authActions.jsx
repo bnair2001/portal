@@ -35,7 +35,7 @@ async (dispatch, getState, {getFirebase, getFirestore})=>{
             displayName:user.displayName,
             createdAt: firestore.FieldValue.serverTimestamp()
         };
-        await firestore.set('users/${createdUser.uid}',{...newUser} )
+        await firestore.set(`users/${createdUser.uid}`,{...newUser} )
         dispatch(closeModal())
     }catch(error){
         console.log(error)
