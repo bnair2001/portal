@@ -113,6 +113,15 @@ class ArchiveForm extends Component {
                 placeholder="Tell us about your archive"
               />
 
+              {clean && 
+              <Field 
+                name="published"
+                type="text"
+                component={SelectOption}
+                placeholder="Publish immediately"
+                
+              />
+              }
               <Field
                 name="date"
                 type="text"
@@ -121,16 +130,12 @@ class ArchiveForm extends Component {
                 timeFormat="HH:mm"
                 showTimeSelect
                 placeholder="Date and time of archive"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck="off"
               />
 
-              {clean && 
-              <Field 
-                name="published"
-                type="text"
-                component={SelectOption}
-                placeholder="Publish immediately"
-              />
-              }
+              
               <Button
                 disabled={invalid || submitting || pristine}
                 positive

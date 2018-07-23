@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { Form, Segment, Button } from 'semantic-ui-react';
+import { Form, Segment, Button, Label } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import TextInput from '../../../app/common/form/TextInput';
 import { registerUser } from "../authActions";
@@ -10,7 +10,7 @@ const actions={
 }
 
 
-const RegisterForm = ({handleSubmit, registerUser}) => {
+const RegisterForm = ({handleSubmit, registerUser, error}) => {
   return (
     <div>
       <Form size="large" onSubmit={handleSubmit(registerUser)}>
@@ -33,6 +33,7 @@ const RegisterForm = ({handleSubmit, registerUser}) => {
             component={TextInput}
             placeholder="Password"
           />
+           {error && <Label basic color='red'>{error}</Label>}
           <Button fluid size="large" color="teal">
             Register
           </Button>
