@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import ArchiveListItem from './ArchiveListItem';
-import InfiniteScroll from 'react-infinite-scroller';
+import React, { Component } from "react";
+import ArchiveListItem from "./ArchiveListItem";
+import InfiniteScroll from "react-infinite-scroller";
 
 class ArchiveList extends Component {
   render() {
-    const { archives, getNextArchives, loading, moreArchives } = this.props;
+    const { archives, getNextArchives, loading, moreArchives} = this.props;
     return (
       <div>
         {archives &&
@@ -15,7 +15,15 @@ class ArchiveList extends Component {
               hasMore={!loading && moreArchives}
               initialLoad={false}
             >
-              {archives && archives.map(archive => <ArchiveListItem key={archive.id} archive={archive}/>)}
+
+              {archives &&
+                archives.map(archive => (
+                  <ArchiveListItem
+                    key={archive.id}
+                    archive={archive}
+                    
+                  />
+                ))}
             </InfiniteScroll>
           )}
       </div>

@@ -1,24 +1,13 @@
-import React, { Component } from 'react';
-import { Grid, Loader } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
-import { getArchivesForDashboard } from '../archiveActions';
-import ArchiveList from '../ArchiveList/ArchiveList';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
-import ArchiveActivity from '../ArchiveActivity/ArchiveActivity';
-
-const query = [
-  {
-    collection: 'activity',
-    orderBy: ['timestamp', 'desc'],
-    limit: 5
-  }
-]
-
+import React, { Component } from "react";
+import { Grid, Loader } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { firestoreConnect } from "react-redux-firebase";
+import { getArchivesForDashboard } from "../archiveActions";
+import ArchiveList from "../ArchiveList/ArchiveList";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 const mapState = state => ({
   archives: state.archives,
-  loading: state.async.loading,
-  activities: state.firestore.ordered.activity
+  loading: state.async.loading
 });
 
 const actions = {
@@ -29,8 +18,7 @@ class ArchiveDashboard extends Component {
   state = {
     moreArchives: false,
     loadingInitial: true,
-    loadedArchives: [],
-    contextRef: {}
+    loadedArchives: []
   };
 
   async componentDidMount() {
@@ -54,8 +42,8 @@ class ArchiveDashboard extends Component {
 
   getNextArchives = async () => {
     const { archives } = this.props;
-    let lastArchive = archives && archives[archives.length - 1];
-    let next = await this.props.getArchivesForDashboard(lastArchive);
+    let lastEvent = archives && archives[archives.length - 1];
+    let next = await this.props.getArchivesForDashboard(lastEvent);
     if (next && next.docs && next.docs.length <= 1) {
       this.setState({
         moreArchives: false
@@ -63,35 +51,32 @@ class ArchiveDashboard extends Component {
     }
   };
 
-  handleContextRef = contextRef => this.setState({contextRef})
-
   render() {
-    const { loading, activities } = this.props;
+    const { loading } = this.props;
     const { moreArchives, loadedArchives } = this.state;
     if (this.state.loadingInitial) return <LoadingComponent inverted={true} />;
-
     return (
       <Grid>
         <Grid.Column width={10}>
-          <div ref={this.handleContextRef}>
           <ArchiveList
             loading={loading}
             moreArchives={moreArchives}
             archives={loadedArchives}
             getNextArchives={this.getNextArchives}
           />
-          </div>
+        </Grid.Column>
 
-        </Grid.Column>
-        <Grid.Column width={6}>
-          <ArchiveActivity activities={activities} contextRef={this.state.contextRef} />
-        </Grid.Column>
+        <Grid.Column width={6} />
+
         <Grid.Column width={10}>
-          <Loader active={loading}/>
+          <Loader active={loading} />
         </Grid.Column>
       </Grid>
     );
   }
 }
 
-export default connect(mapState, actions)(firestoreConnect(query)(ArchiveDashboard));
+export default connect(
+  mapState,
+  actions
+)(firestoreConnect([{ collection: "Archives" }])(ArchiveDashboard));

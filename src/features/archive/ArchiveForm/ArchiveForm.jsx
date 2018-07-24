@@ -1,131 +1,93 @@
-/*global google*/
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
-import { withFirestore } from 'react-redux-firebase';
-import Script from 'react-load-script';
-import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-import { Segment, Form, Button, Grid, Header } from 'semantic-ui-react';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { reduxForm, Field } from "redux-form";
+
+import { withFirestore } from "react-redux-firebase";
+import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import {
   composeValidators,
   combineValidators,
   isRequired,
   hasLengthGreaterThan
-} from 'revalidate';
-import { createArchive, updateArchive, cancelToggle } from '../archiveActions';
-import TextInput from '../../../app/common/form/TextInput';
-import TextArea from '../../../app/common/form/TextArea';
-import SelectInput from '../../../app/common/form/SelectInput';
-import DateInput from '../../../app/common/form/DateInput';
-import PlaceInput from '../../../app/common/form/PlaceInput';
-
+} from "revalidate";
+import { createArchive, updateArchive, publishToggle} from "../archiveActions";
+import TextInput from "../../../app/common/form/TextInput";
+import TextArea from "../../../app/common/form/TextArea";
+import SelectInput from "../../../app/common/form/SelectInput";
+import DateInput from "../../../app/common/form/DateInput";
+import SelectOption from "../../../app/common/form/SelectOption";
 const mapState = state => {
+  
+  let clean=true;
   let archive = {};
 
-  if (state.firestore.ordered.archives && state.firestore.ordered.archives[0]) {
-    archive = state.firestore.ordered.archives[0];
+  if (state.firestore.ordered.Archives && state.firestore.ordered.Archives[0]) {
+    archive = state.firestore.ordered.Archives[0];
+    clean=false;
   }
 
   return {
     initialValues: archive,
-    archive
+    archive,
+    clean
   };
 };
 
 const actions = {
   createArchive,
   updateArchive,
-  cancelToggle
+  publishToggle
 };
 
 const category = [
-  { key: 'drinks', text: 'Drinks', value: 'drinks' },
-  { key: 'culture', text: 'Culture', value: 'culture' },
-  { key: 'film', text: 'Film', value: 'film' },
-  { key: 'food', text: 'Food', value: 'food' },
-  { key: 'music', text: 'Music', value: 'music' },
-  { key: 'travel', text: 'Travel', value: 'travel' }
+  { key: "physics", text: "Physics", value: "physics" },
+  { key: "chemistry", text: "Chemistry", value: "chemistry" },
+  { key: "maths", text: "Mathematics", value: "maths" },
+  { key: "english", text: "English", value: "english" },
+  { key: "biology", text: "Biology", value: "biology" },
+  { key: "csc", text: "Computer Science", value: "csc" },
+  { key: "other", text: "others", value: "other" }
 ];
 
 const validate = combineValidators({
-  title: isRequired({ message: 'The archive title is required' }),
-  category: isRequired({ message: 'Please provide a category' }),
+  title: isRequired({ message: "The archive title is required" }),
+  category: isRequired({ message: "Please provide a category" }),
   description: composeValidators(
-    isRequired({ message: 'Please enter a description' }),
+    isRequired({ message: "Please enter a description" }),
     hasLengthGreaterThan(4)({
-      message: 'Description needs to be at least 5 characters'
+      message: "Description needs to be at least 5 characters"
     })
   )(),
-  city: isRequired('city'),
-  venue: isRequired('venue'),
-  date: isRequired('date')
+  city: isRequired("city"),
+  venue: isRequired("venue"),
+  date: isRequired("date")
 });
 
 class ArchiveForm extends Component {
-  state = {
-    
-    scriptLoaded: false
-  };
-
-  async componentDidMount() {
-    const {firestore, match} = this.props;
-    await firestore.setListener(`archives/${match.params.id}`);
-    
-  }
-
-  async componentWillUnmount() {
-    const {firestore, match} = this.props;
-    await firestore.unsetListener(`archives/${match.params.id}`);
-  }
-
-  handleScriptLoaded = () => this.setState({ scriptLoaded: true });
-
-  handleCitySelect = selectedCity => {
-    geocodeByAddress(selectedCity)
-      .then(results => getLatLng(results[0]))
-      .then(latlng => {
-        this.setState({
-          cityLatLng: latlng
-        });
-      })
-      .then(() => {
-        this.props.change('city', selectedCity);
-      });
-  };
-
-  handleVenueSelect = selectedVenue => {
-    geocodeByAddress(selectedVenue)
-      .then(results => getLatLng(results[0]))
-      .then(latlng => {
-        this.setState({
-          venueLatLng: latlng
-        });
-      })
-      .then(() => {
-        this.props.change('venue', selectedVenue);
-      });
-  };
-
   onFormSubmit = values => {
-    
+    console.log(values);
     if (this.props.initialValues.id) {
-     
       this.props.updateArchive(values);
       this.props.history.goBack();
     } else {
       this.props.createArchive(values);
-      this.props.history.push('/archives');
+      this.props.history.push("/archives");
     }
   };
 
+  async componentDidMount() {
+    const {firestore, match} = this.props;
+    await firestore.setListener(`Archives/${match.params.id}`);
+  }
+  async componentWillUnmount() {
+    const {firestore, match} = this.props;
+    await firestore.unsetListener(`Archives/${match.params.id}`);
+  }
+
   render() {
-    const { invalid, submitting, pristine, archive, cancelToggle } = this.props;
+    const { invalid, submitting, pristine, archive, publishToggle, clean } = this.props;
     return (
       <Grid>
-        <Script
-          url="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1Oy3Ic6JyE6RR4eEbEFw2T-ynXjjWzTc&libraries=places"
-          onLoad={this.handleScriptLoaded}
-        />
         <Grid.Column width={10}>
           <Segment>
             <Header sub color="teal" content="Archive Details" />
@@ -150,29 +112,16 @@ class ArchiveForm extends Component {
                 rows={3}
                 placeholder="Tell us about your archive"
               />
-              <Header sub color="teal" content="Archive Location details" />
-              <Field
-                name="city"
+
+              {clean && 
+              <Field 
+                name="published"
                 type="text"
-                component={PlaceInput}
-                options={{ types: ['(cities)'] }}
-                placeholder="Archive city"
-                onSelect={this.handleCitySelect}
+                component={SelectOption}
+                placeholder="Publish immediately"
+                
               />
-              {this.state.scriptLoaded && (
-                <Field
-                  name="venue"
-                  type="text"
-                  component={PlaceInput}
-                  options={{
-                    location: new google.maps.LatLng(this.state.cityLatLng),
-                    radius: 1000,
-                    types: ['establishment']
-                  }}
-                  placeholder="Archive venue"
-                  onSelect={this.handleVenueSelect}
-                />
-              )}
+              }
               <Field
                 name="date"
                 type="text"
@@ -185,6 +134,8 @@ class ArchiveForm extends Component {
                 autoCorrect="off"
                 spellCheck="off"
               />
+
+              
               <Button
                 disabled={invalid || submitting || pristine}
                 positive
@@ -195,13 +146,13 @@ class ArchiveForm extends Component {
               <Button onClick={this.props.history.goBack} type="button">
                 Cancel
               </Button>
-              <Button
-                onClick={() => cancelToggle(!archive.cancelled, archive.id)}
+              {!clean && <Button
+                onClick={() => publishToggle(!archive.published, archive.id)}
                 type='button'
-                color={archive.cancelled ? 'green' : 'red'}
+                color={archive.published ? 'green' : 'red'}
                 floated='right'
-                content={archive.cancelled ? 'Reactivate Archive' : 'Cancel Archive'}
-              />
+                content={archive.published ? 'Unpublish' : 'Publish'}
+              />}
             </Form>
           </Segment>
         </Grid.Column>
@@ -211,8 +162,11 @@ class ArchiveForm extends Component {
 }
 
 export default withFirestore(
-  connect(mapState, actions)(
-    reduxForm({ form: 'archiveForm', enableReinitialize: true, validate })(
+  connect(
+    mapState,
+    actions
+  )(
+    reduxForm({ form: "archiveForm", enableReinitialize: true, validate })(
       ArchiveForm
     )
   )
