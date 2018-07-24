@@ -2,6 +2,7 @@ import { toastr } from "react-redux-toastr";
 import {  DELETE_ARCHIVE } from './archiveConstants';
 import { createNewArchive } from '../../app/common/util/helpers';
 import moment from 'moment';
+//import firebase from '../../app/config/firebase';
 export const createArchive = (archive) => {
  
   return async (dispatch, getState, { getFirestore }) => {
@@ -71,3 +72,23 @@ export const publishToggle = (published, ArchiveId) => async (
     console.log(error);
   }
 };
+export const addArchiveComment = (archiveId, values, parentId) => 
+  async (dispatch, getState, {getFirebase}) => {
+    const firebase = getFirebase();
+    const profile = getState().firebase.profile;
+    const user = firebase.auth().currentUser;
+    let newComment = {
+      parentId: parentId,
+      displayName: profile.displayName,
+      photoURL: profile.photoURL || '/assets/user.png',
+      uid: user.uid,
+      text: values.comment,
+      date: Date.now()
+    }
+    try {
+      await firebase.push(`archive_chat/${archiveId}`, newComment)
+    } catch (error) {
+      console.log(error);
+      toastr.error('Oops', 'Problem adding comment')
+    }
+  }

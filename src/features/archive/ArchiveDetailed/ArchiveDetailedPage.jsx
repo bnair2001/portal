@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
 import { Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { withFirestore, isLoaded, isEmpty } from 'react-redux-firebase';
+import { withFirestore, isLoaded, isEmpty, firebaseConnect } from 'react-redux-firebase';
+import { compose } from "redux";
 import ArchiveDetailedHeader from './ArchiveDetailedHeader';
 import ArchiveDetailedInfo from './ArchiveDetailedInfo';
 import ArchiveDetailedChat from './ArchiveDetailedChat';
+import { objectToArray, createDataTree } from '../../../app/common/util/helpers';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { addArchiveComment } from "../archiveActions";
 
-const mapState = state => {
+const mapState = (state, ownProps) => {
   
   let archive = {};
 
@@ -18,10 +21,16 @@ const mapState = state => {
 
   return {
     archive,
-    auth:state.firebase.auth
+    auth:state.firebase.auth,
+    archiveChat:
+      !isEmpty(state.firebase.data.archive_chat) &&
+      objectToArray(state.firebase.data.archive_chat[ownProps.match.params.id])
   }
 }
-
+const actions = {
+  
+  addArchiveComment
+};
 
 
 class ArchiveDetailedPage extends Component {
@@ -31,15 +40,16 @@ class ArchiveDetailedPage extends Component {
     
   }
   render(){
-    const {archive,auth} = this.props;
+    const {archive,auth,addArchiveComment, archiveChat} = this.props;
     const isHost = archive.hostUid === auth.uid;
+    const chatTree = !isEmpty(archiveChat) && createDataTree(archiveChat)
     if(!isLoaded(archive) || isEmpty(archive))return <LoadingComponent inverted={true} />
     return (
       <Grid>
       <Grid.Column width={12}>
         <ArchiveDetailedHeader archive={archive}  isHost={isHost}/>
         <ArchiveDetailedInfo archive={archive} />
-        <ArchiveDetailedChat />
+        <ArchiveDetailedChat archiveChat={chatTree} addArchiveComment={addArchiveComment} archiveId={archive.id} />
       </Grid.Column>
      
     </Grid>
@@ -48,4 +58,9 @@ class ArchiveDetailedPage extends Component {
 }
 
 
-export default  withFirestore(connect(mapState)(ArchiveDetailedPage));
+export default compose(
+  withFirestore,
+  connect(mapState, actions),
+  firebaseConnect(props => [`archive_chat/${props.match.params.id}`])
+)(ArchiveDetailedPage);
+
