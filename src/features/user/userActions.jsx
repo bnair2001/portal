@@ -90,6 +90,8 @@ export const setMainPhoto = photo => async (dispatch, getState) => {
   const today = new Date(Date.now());
   let userDocRef = firestore.collection('users').doc(user.uid);
   let eventAttendeeRef = firestore.collection('event_attendee');
+  
+  let archiveRef = firestore.collection('Archives');
   try {
     let batch = firestore.batch();
 
@@ -115,6 +117,19 @@ export const setMainPhoto = photo => async (dispatch, getState) => {
         })
       }
     }
+    
+    let archiveQuery = await archiveRef.where('hostUid', '==', user.uid);
+    let archiveQuerySnap = await archiveQuery.get();
+
+    for (let i=0; i<archiveQuerySnap.docs.length; i++) {
+      let archiveDocRef = await firestore.collection('Archives').doc(archiveQuerySnap.docs[i].id)
+      batch.update(archiveDocRef, {
+          hostPhotoURL: photo.url
+      })
+      
+    }
+
+    
     console.log(batch);
     await batch.commit();
     dispatch(asyncActionFinish())
