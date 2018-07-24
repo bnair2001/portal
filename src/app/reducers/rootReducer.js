@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { reducer as FormReducer } from 'redux-form';
-import {reducer as toastrReducer} from 'react-redux-toastr';
+import { reducer as FormReducer } from '../../../../Library/Caches/typescript/2.9/node_modules/@types/redux-form';
+import {reducer as toastrReducer} from '../../../../Library/Caches/typescript/2.9/node_modules/@types/react-redux-toastr';
 import testReducer from '../../features/testarea/testReducer';
 import eventReducer from '../../features/event/eventReducer'
 import modalsReducer from "../../features/modals/modalReducer"

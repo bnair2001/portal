@@ -1,7 +1,7 @@
 import { createReducer } from '../../app/common/util/reducerUtil';
-import { CREATE_ARCHIVE, DELETE_ARCHIVE, UPDATE_ARCHIVE } from './archiveConstants';
+import { CREATE_ARCHIVE, DELETE_ARCHIVE, UPDATE_ARCHIVE, FETCH_ARCHIVES } from './archiveConstants';
 
-const initialState = [];
+ const initialState = [];
 
 export const createArchive = (state, payload) => {
   return [...state, Object.assign({}, payload.archive)]
@@ -20,8 +20,13 @@ export const deleteArchive = (state, payload) => {
   ]
 }
 
+export const fetchArchives = (state, payload) => {
+  return payload.archives
+}
+
 export default createReducer(initialState, {
   [CREATE_ARCHIVE]: createArchive,
   [UPDATE_ARCHIVE]: updateArchive,
-  [DELETE_ARCHIVE]: deleteArchive
+  [DELETE_ARCHIVE]: deleteArchive,
+  [FETCH_ARCHIVES]: fetchArchives
 })
