@@ -3,32 +3,35 @@ import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 
-
 const archiveImageStyle = {
-    filter: 'brightness(85%)'
+  filter: 'brightness(30%)'
 };
 
 const archiveImageTextStyle = {
-    position: 'absolute',
-    bottom: '5%',
-    left: '5%',
-    width: '100%',
-    height: 'auto',
-    color: 'white'
+  position: 'absolute',
+  bottom: '5%',
+  left: '5%',
+  width: '100%',
+  height: 'auto',
+  color: 'white'
 };
 
-const ArchiveDetailedHeader = ({archive, isHost}) => {
+const ArchiveDetailedHeader = ({ archive, isHost, isGoing, goingToArchive, cancelGoingToArchive }) => {
   let archiveDate;
-  if(archive.date){
+  if (archive.date) {
     archiveDate = archive.date.toDate();
   }
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: '0' }}>
-        <Image src={`/assets/categoryImages/${archive.category}.png`} fluid style={archiveImageStyle} />
+        <Image
+          src={`/assets/categoryImages/${archive.category}.jpg`}
+          fluid
+          style={archiveImageStyle}
+        />
 
         <Segment basic style={archiveImageTextStyle}>
-        <Item.Group>
+          <Item.Group>
             <Item>
               <Item.Content>
                 <Header
@@ -47,7 +50,15 @@ const ArchiveDetailedHeader = ({archive, isHost}) => {
       </Segment>
 
       <Segment attached="bottom">
-        
+        {!isHost && (
+          <div>
+            {isGoing ? (
+              <Button onClick={() => cancelGoingToArchive(archive)}>Cancel My Place</Button>
+            ) : (
+              <Button onClick={() => goingToArchive(archive)} color="teal">JOIN THIS ARCHIVE</Button>
+            )}
+          </div>
+        )}
 
         {isHost && (
           <Button

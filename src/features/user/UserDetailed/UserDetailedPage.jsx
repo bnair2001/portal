@@ -8,9 +8,11 @@ import UserDetailedDescription from './UserDetailedDescription'
 import UserDetailedPhotos from './UserDetailedPhotos'
 import UserDetailedSidebar from './UserDetailedSidebar'
 import UserDetailedEvents from './UserDetailedEvents'
+import UserDetailedArchives from './UserDetailedArchives'
 import { userDetailedQuery } from '../userQueries'
 import LoadingComponent from '../../../app/layout/LoadingComponent'
-import { getUserEvents, followUser, unfollowUser } from '../userActions'
+import { getUserEvents, followUser, unfollowUser, getUserArchives } from '../userActions'
+
 
 const mapState = (state, ownProps) => {
   let userUid = null;
@@ -26,7 +28,9 @@ const mapState = (state, ownProps) => {
     profile,
     userUid,
     events: state.events,
+    archives: state.archives,
     eventsLoading: state.async.loading,
+    archivesLoading: state.async.loading,
     auth: state.firebase.auth,
     photos: state.firestore.ordered.photos,
     requesting: state.firestore.status.requesting,
@@ -37,7 +41,8 @@ const mapState = (state, ownProps) => {
 const actions = {
   getUserEvents,
   followUser,
-  unfollowUser
+  unfollowUser,
+  getUserArchives
 }
 
 class UserDetailedPage extends Component {
@@ -51,8 +56,17 @@ class UserDetailedPage extends Component {
     this.props.getUserEvents(this.props.userUid, data.activeIndex)
   }
 
+  async componentDidMount() {
+    let events = await this.props.getUserArchives(this.props.userUid);
+    console.log(events);
+  }
+
+  changeTab = (e, data) => {
+    this.props.getUserArchives(this.props.userUid, data.activeIndex)
+  }
+
   render() {
-    const {profile, photos, auth, match, requesting, events, eventsLoading, followUser, following, unfollowUser} = this.props;
+    const {profile, photos, auth, match, requesting, events, eventsLoading, followUser, following, unfollowUser, archives, archivesLoading} = this.props;
     const isCurrentUser = auth.uid === match.params.id;
     const loading = Object.values(requesting).some(a => a === true);
     const isFollowing = !isEmpty(following)
@@ -66,6 +80,7 @@ class UserDetailedPage extends Component {
         {photos && photos.length > 0 &&
         <UserDetailedPhotos photos={photos}/>}
         <UserDetailedEvents changeTab={this.changeTab} events={events} eventsLoading={eventsLoading}/>
+        <UserDetailedArchives changeTab={this.changeTab} archives={archives} archivesLoading={archivesLoading}/>
       </Grid>
     );
   }
