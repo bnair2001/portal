@@ -13,7 +13,6 @@ import { userDetailedQuery } from '../userQueries'
 import LoadingComponent from '../../../app/layout/LoadingComponent'
 import { getUserEvents, followUser, unfollowUser, getUserArchives } from '../userActions'
 
-
 const mapState = (state, ownProps) => {
   let userUid = null;
   let profile = {};
@@ -38,6 +37,7 @@ const mapState = (state, ownProps) => {
   }
 }
 
+
 const actions = {
   getUserEvents,
   followUser,
@@ -57,13 +57,14 @@ class UserDetailedPage extends Component {
   }
 
   async componentDidMount() {
-    let events = await this.props.getUserArchives(this.props.userUid);
-    console.log(events);
+    let archives = await this.props.getUserArchives(this.props.userUid);
+    console.log(archives);
   }
 
   changeTab = (e, data) => {
     this.props.getUserArchives(this.props.userUid, data.activeIndex)
   }
+
 
   render() {
     const {profile, photos, auth, match, requesting, events, eventsLoading, followUser, following, unfollowUser, archives, archivesLoading} = this.props;

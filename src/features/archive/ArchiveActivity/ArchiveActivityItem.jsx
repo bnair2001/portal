@@ -4,26 +4,26 @@ import { Link } from 'react-router-dom';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 
 class ArchiveActivityItem extends Component {
-  renderSummary = activity => {
-    switch (activity.type) {
+  renderSummary = activity_arc => {
+    switch (activity_arc.type) {
       case 'newArchive':
         return (
           <div>
             New Archive!{' '}
-            <Feed.User as={Link} to={{ pathname: '/profile/' + activity.hostUid }}>
-              {activity.hostedBy}
+            <Feed.User as={Link} to={{ pathname: '/profile/' + activity_arc.hostUid }}>
+              {activity_arc.hostedBy}
             </Feed.User>{' '}
-            is hosting <Link to={{ pathname: '/archive/' + activity.archiveId }}>{activity.title}</Link>
+            is hosting <Link to={{ pathname: '/archive/' + activity_arc.archiveId }}>{activity_arc.title}</Link>
           </div>
         );
       case 'cancelledArchive':
         return (
           <div>
             Archive Cancelled!{' '}
-            <Feed.User as={Link} to={{ pathname: '/profile/' + activity.hostUid }}>
-              {activity.hostedBy}
+            <Feed.User as={Link} to={{ pathname: '/profile/' + activity_arc.hostUid }}>
+              {activity_arc.hostedBy}
             </Feed.User>{' '}
-            has cancelled <Link to={{ pathname: '/archive/' + activity.archiveId }}>{activity.title}</Link>
+            has cancelled <Link to={{ pathname: '/archive/' + activity_arc.archiveId }}>{activity_arc.title}</Link>
           </div>
         );
       default:
@@ -32,17 +32,17 @@ class ArchiveActivityItem extends Component {
   };
 
   render() {
-    const { activity } = this.props;
+    const { activity_arc } = this.props;
 
     return (
       <Feed.Archive>
         <Feed.Label>
-          <img src={activity.photoURL || '/assets/user.png'} alt="" />
+          <img src={activity_arc.photoURL || '/assets/user.png'} alt="" />
         </Feed.Label>
         <Feed.Content>
-          <Feed.Summary>{this.renderSummary(activity)}</Feed.Summary>
+          <Feed.Summary>{this.renderSummary(activity_arc)}</Feed.Summary>
           <Feed.Meta>
-            <Feed.Date>{distanceInWordsToNow(activity.timestamp.toDate())} ago</Feed.Date>
+            <Feed.Date>{distanceInWordsToNow(activity_arc.timestamp.toDate())} ago</Feed.Date>
           </Feed.Meta>
         </Feed.Content>
       </Feed.Archive>

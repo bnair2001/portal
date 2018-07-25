@@ -9,8 +9,8 @@ const ArchiveActivity = ({activities, contextRef}) => {
       <Header attached='top' content='Recent Activity'/>
       <Segment attached>
         <Feed>
-          {activities && activities.map((activity) => (
-            <ArchiveActivityItem key={activity.id} activity={activity}/>
+          {activities && activities.map((activity_arc) => (
+            <ArchiveActivityItem key={activity_arc.id} activity_arc={activity_arc}/>
           ))}
         </Feed>
       </Segment>
