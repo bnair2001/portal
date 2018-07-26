@@ -17,6 +17,7 @@ import SelectInput from "../../../app/common/form/SelectInput";
 import DateInput from "../../../app/common/form/DateInput";
 import SelectOption from "../../../app/common/form/SelectOption";
 import { onDropAction } from "../../user/userActions";
+import cuid from 'cuid'; 
 const mapState = state => {
   let clean = true;
   let archive = {};
@@ -77,15 +78,17 @@ class ArchiveForm extends Component {
   }
 
   onFormSubmit = values => {
-    console.log(values);
+    const {match} = this.props;
+    this.props.onDropAction(this.state.files, cuid);
+
     if (this.props.initialValues.id) {
       this.props.updateArchive(values);
       this.props.history.goBack();
     } else {
-      this.props.createArchive(values);
+      this.props.createArchive(values, this.state.files);
       this.props.history.push("/archives");
     }
-    this.props.onDropAction(this.state.files);
+    
   };
 
   async componentDidMount() {

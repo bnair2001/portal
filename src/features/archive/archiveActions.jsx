@@ -10,17 +10,20 @@ import firebase from '../../app/config/firebase';
 
 
 
-export const createArchive = (archive) => {
+export const createArchive = (archive, files) => {
  
   return async (dispatch, getState, { getFirestore }) => {
     const firestore = getFirestore();
     const user = firestore.auth().currentUser;
     const photoURL = getState().firebase.profile.photoURL;
-    let newArchive = createNewArchive(user, photoURL, archive);
+     
+    let newArchive = createNewArchive(files,user, photoURL, archive);
+    console.log(newArchive);
     try {
       await firestore.add(`Archives`, newArchive);
       toastr.success('Success', 'Event has been created');
     } catch (error) {
+      console.log(error);
       toastr.error('Oops', 'Something went wrong');
     }
   };

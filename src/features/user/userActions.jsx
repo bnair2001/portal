@@ -325,9 +325,9 @@ export const getUserArchives = (userUid, activeTab) => async (dispatch, getState
 }
 
 
-export const onDropAction=(files) => async (dispatch, getState, { getFirebase, getFirestore }) => {
+export const onDropAction=(files,uid) => async (dispatch, getState, { getFirebase, getFirestore }) => {
   
-  
+  let dfiles=[];
     for (var i = 0; i < files.length; i++) {
       let multfiles = files[i];
       uploadImageAsPromise(multfiles);
@@ -355,8 +355,21 @@ export const onDropAction=(files) => async (dispatch, getState, { getFirebase, g
             function complete(){
                 var downloadURL = task.snapshot.downloadURL;
                 console.log(downloadURL);
+                dfiles.push(downloadURL);
+                
             }
         );
     });
+}
+const emUpdates={
+  dfiles:{ ...dfiles}
+}
+let firestore=getFirestore();
+
+try {
+  await firestore.update({collection:'Archives', doc:uid},emUpdates);
+  
+} catch (error) {
+  console.log(error);
 }
 };

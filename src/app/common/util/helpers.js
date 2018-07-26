@@ -25,10 +25,20 @@ export const createNewEvent = (user, photoURL, event) => {
     }
   }
 }
-export const createNewArchive = (user, photoURL, archive) => {
+
+function toObject(arr) {
+  var rv = {};
+  for (var i = 0; i < arr.length; ++i)
+    rv[i] = arr[i].name;
+  return rv;
+}
+export const createNewArchive = (files,user, photoURL, archive) => {
   archive.date = moment(archive.date).toDate();
+  let obj=toObject(files);
+  
   return {
     ...archive,
+    files:{...obj},
     hostUid: user.uid,
     hostedBy: user.displayName,
     hostPhotoURL: photoURL || '/assets/user.png',
