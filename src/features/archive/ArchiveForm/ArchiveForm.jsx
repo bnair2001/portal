@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
-
+import Dropzone from "react-dropzone";
 import { withFirestore } from "react-redux-firebase";
 import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import {
@@ -10,20 +10,20 @@ import {
   isRequired,
   hasLengthGreaterThan
 } from "revalidate";
-import { createArchive, updateArchive, publishToggle} from "../archiveActions";
+import { createArchive, updateArchive, publishToggle } from "../archiveActions";
 import TextInput from "../../../app/common/form/TextInput";
 import TextArea from "../../../app/common/form/TextArea";
 import SelectInput from "../../../app/common/form/SelectInput";
 import DateInput from "../../../app/common/form/DateInput";
 import SelectOption from "../../../app/common/form/SelectOption";
+import { onDropAction } from "../../user/userActions";
 const mapState = state => {
-  
-  let clean=true;
+  let clean = true;
   let archive = {};
 
   if (state.firestore.ordered.Archives && state.firestore.ordered.Archives[0]) {
     archive = state.firestore.ordered.Archives[0];
-    clean=false;
+    clean = false;
   }
 
   return {
@@ -36,7 +36,8 @@ const mapState = state => {
 const actions = {
   createArchive,
   updateArchive,
-  publishToggle
+  publishToggle,
+  onDropAction
 };
 
 const category = [
@@ -64,6 +65,17 @@ const validate = combineValidators({
 });
 
 class ArchiveForm extends Component {
+  constructor() {
+    super();
+    this.state = { files: [] };
+  }
+
+  onDrop(files) {
+    this.setState({
+      files
+    });
+  }
+
   onFormSubmit = values => {
     console.log(values);
     if (this.props.initialValues.id) {
@@ -73,19 +85,28 @@ class ArchiveForm extends Component {
       this.props.createArchive(values);
       this.props.history.push("/archives");
     }
+    this.props.onDropAction(this.state.files);
   };
 
   async componentDidMount() {
-    const {firestore, match} = this.props;
+    const { firestore, match } = this.props;
     await firestore.setListener(`Archives/${match.params.id}`);
   }
   async componentWillUnmount() {
-    const {firestore, match} = this.props;
+    const { firestore, match } = this.props;
     await firestore.unsetListener(`Archives/${match.params.id}`);
   }
 
   render() {
-    const { invalid, submitting, pristine, archive, publishToggle, clean } = this.props;
+    const {
+      invalid,
+      submitting,
+      pristine,
+      archive,
+      publishToggle,
+      clean,
+      files
+    } = this.props;
     return (
       <Grid>
         <Grid.Column width={10}>
@@ -113,15 +134,14 @@ class ArchiveForm extends Component {
                 placeholder="Tell us about your archive"
               />
 
-              {clean && 
-              <Field 
-                name="published"
-                type="text"
-                component={SelectOption}
-                placeholder="Publish immediately"
-                
-              />
-              }
+              {clean && (
+                <Field
+                  name="published"
+                  type="text"
+                  component={SelectOption}
+                  placeholder="Publish immediately"
+                />
+              )}
               <Field
                 name="date"
                 type="text"
@@ -135,7 +155,6 @@ class ArchiveForm extends Component {
                 spellCheck="off"
               />
 
-              
               <Button
                 disabled={invalid || submitting || pristine}
                 positive
@@ -146,13 +165,36 @@ class ArchiveForm extends Component {
               <Button onClick={this.props.history.goBack} type="button">
                 Cancel
               </Button>
-              {!clean && <Button
-                onClick={() => publishToggle(!archive.published, archive.id)}
-                type='button'
-                color={archive.published ? 'green' : 'red'}
-                floated='right'
-                content={archive.published ? 'Unpublish' : 'Publish'}
-              />}
+              {!clean && (
+                <Button
+                  onClick={() => publishToggle(!archive.published, archive.id)}
+                  type="button"
+                  color={archive.published ? "green" : "red"}
+                  floated="right"
+                  content={archive.published ? "Unpublish" : "Publish"}
+                />
+              )}
+
+              <section>
+                <div className="dropzone">
+                  <Dropzone onDrop={this.onDrop.bind(this)}>
+                    <p>
+                      Try dropping some files here, or click to select files to
+                      upload.
+                    </p>
+                  </Dropzone>
+                </div>
+                <aside>
+                  <h2>Dropped files</h2>
+                  <ul>
+                    {this.state.files.map(f => (
+                      <li key={f.name}>
+                        {f.name} - {f.size} bytes
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
+              </section>
             </Form>
           </Segment>
         </Grid.Column>

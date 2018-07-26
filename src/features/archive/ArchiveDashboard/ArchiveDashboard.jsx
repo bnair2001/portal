@@ -93,4 +93,4 @@ class ArchiveDashboard extends Component {
 export default connect(
   mapState,
   actions
-)(firestoreConnect([{ collection: "Archives" }])(ArchiveDashboard));
+)(firestoreConnect(query)(ArchiveDashboard));

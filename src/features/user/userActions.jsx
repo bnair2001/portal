@@ -34,6 +34,7 @@ export const uploadProfileImage = (file, fileName) => async (dispatch, getState,
     dispatch(asyncActionStart());
     // upload the file to fb storage
     let uploadedFile = await firebase.uploadFile(path, file, null, options);
+    console.log(uploadedFile);
     // get url of image
     let downloadURL = await uploadedFile.uploadTaskSnapshot.downloadURL;
     // get the userdoc from firestore
@@ -325,4 +326,41 @@ export const getUserArchives = (userUid, activeTab) => async (dispatch, getState
     console.log(error);
     dispatch(asyncActionError());
   }
+}
+
+
+export const onDropAction=(files) => async (dispatch, getState, { getFirebase, getFirestore }) => {
+  
+  
+    for (var i = 0; i < files.length; i++) {
+      let multfiles = files[i];
+      uploadImageAsPromise(multfiles);
+      
+  }
+
+  console.log(files);
+  
+  function uploadImageAsPromise (files) {
+    return new Promise(function (resolve, reject) {
+        var storageRef = firebase.storage().ref("images/"+files.name);
+
+        //Upload file
+        var task = storageRef.put(files);
+
+        //Update progress bar
+        task.on('state_changed',
+            function progress(snapshot){
+                var percentage = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+                //uploader.value = percentage;
+            },
+            function error(err){
+
+            },
+            function complete(){
+                var downloadURL = task.snapshot.downloadURL;
+                console.log(downloadURL);
+            }
+        );
+    });
+}
 };

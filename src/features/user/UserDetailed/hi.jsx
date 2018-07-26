@@ -98,3 +98,49 @@ export const goingToArchive = archive => async (dispatch, getState) => {
       dispatch(asyncActionError());
     }
   };
+
+  // const imageName = cuid();
+  // const firebase = getFirebase();
+  // const firestore = getFirestore();
+  // const user = firebase.auth().currentUser;
+  // const path = `${user.uid}/uploaded_images`;
+  // const options = {
+  //   name: imageName
+  // };
+  // try {
+  //   dispatch(asyncActionStart());
+  //   // upload the file to fb storage
+  //   let uploadedFile = await firebase.uploadFile(path, files[0], null, options);
+  //   // get url of image
+  //   let downloadURL = await uploadedFile.uploadTaskSnapshot.downloadURL;
+  //   console.log(downloadURL);
+  //   // get the userdoc from firestore
+  //   let userDoc = await firestore.get(`users/${user.uid}`);
+  //   // check if user has photo, if not update profile
+  //   if (!userDoc.data().photoURL) {
+  //     await firebase.updateProfile({
+  //       photoURL: downloadURL
+  //     });
+  //     await user.updateProfile({
+  //       photoURL: downloadURL
+  //     });
+  //   }
+  //   // add the new photo to photos collection
+  //   await firestore.add(
+  //     {
+  //       collection: 'Archives',
+  //       doc: user.uid,
+  //       subcollections: [{ collection: 'photos' }]
+  //     },
+  //     {
+  //       name: imageName,
+  //       url: downloadURL,
+        
+  //     }
+  //   );
+  //   dispatch(asyncActionFinish());
+  // } catch (error) {
+  //   console.log(error);
+  //   dispatch(asyncActionError());
+  //   throw new Error('Problem uploading photo');
+  // }
