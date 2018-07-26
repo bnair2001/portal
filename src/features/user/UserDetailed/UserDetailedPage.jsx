@@ -48,21 +48,16 @@ const actions = {
 class UserDetailedPage extends Component {
 
   async componentDidMount() {
-    let events = await this.props.getUserEvents(this.props.userUid);
-    console.log(events);
+    let events = await this.props.getUserEvents(this.props.userUid );
+    await this.props.getUserArchives(this.props.userUid);
+    
   }
 
   changeTab = (e, data) => {
-    this.props.getUserEvents(this.props.userUid, data.activeIndex)
+    this.props.getUserEvents(this.props.userUid, data.activeIndex);
   }
-
-  async componentDidMount() {
-    let archives = await this.props.getUserArchives(this.props.userUid);
-    console.log(archives);
-  }
-
-  changeTab = (e, data) => {
-    this.props.getUserArchives(this.props.userUid, data.activeIndex)
+  changeTabar = (e, data) => {
+    this.props.getUserArchives(this.props.userUid, data.activeIndex);
   }
 
 
@@ -81,7 +76,7 @@ class UserDetailedPage extends Component {
         {photos && photos.length > 0 &&
         <UserDetailedPhotos photos={photos}/>}
         <UserDetailedEvents changeTab={this.changeTab} events={events} eventsLoading={eventsLoading}/>
-        <UserDetailedArchives changeTab={this.changeTab} archives={archives} archivesLoading={archivesLoading}/>
+        <UserDetailedArchives changeTabar={this.changeTabar} archives={archives} archivesLoading={archivesLoading}/>
       </Grid>
     );
   }

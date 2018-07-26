@@ -36,7 +36,7 @@ class ArchiveDashboard extends Component {
   async componentDidMount() {
     let next = await this.props.getArchivesForDashboard();
 
-    if (next && next.docs && next.docs.length > 1) {
+    if (next && next.docs && next.docs.length >= 1) {
       this.setState({
         moreArchives: true,
         loadingInitial: false

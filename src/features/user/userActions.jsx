@@ -200,6 +200,7 @@ export const getUserEvents = (userUid, activeTab) => async (dispatch, getState) 
   const today = new Date(Date.now());
   let eventsRef = firestore.collection('event_attendee');
   let query;
+  
   switch (activeTab) {
     case 1: // past events
       query = eventsRef
@@ -282,43 +283,38 @@ export const unfollowUser = userToUnfollow => async (dispatch, getState, { getFi
 export const getUserArchives = (userUid, activeTab) => async (dispatch, getState) => {
   dispatch(asyncActionStart());
   const firestore = firebase.firestore();
-  const today = new Date(Date.now());
+  
   let archivesRef = firestore.collection('Archives');
   let query;
   switch (activeTab) {
-    case 1: // past archives
+    case 1: // published archives
       query = archivesRef
-        .where('hostUid', '==', userUid)
-        .where('date', '<=', today)
-        .orderBy('date', 'desc');
+        .where('hostUid', '==',userUid)
+        .where('published', '==', true)
+        .orderBy('created', 'desc');
       break;
-    case 2: // future archives
+    case 2: // unpublished archives
       query = archivesRef
-        .where('hostUid', '==', userUid)
-        .where('date', '>=', today)
-        .orderBy('date');
+        .where('hostUid', '==',userUid)
+        .where('published', '==', false)
+        .orderBy('created', 'desc');
       break;
-    case 3: // hosted archives
-      query = archivesRef
-        .where('hostUid', '==', userUid)
-        //.where('host', '==', true)
-        .orderBy('date', 'desc');
-      break;
+    
     default:
-      query = archivesRef.where('userUid', '==', userUid).orderBy('archiveDate', 'desc');
+      query = archivesRef.where('hostUid', '==',userUid).orderBy('created', 'desc');
   }
   try {
     let querySnap = await query.get();
     let archives = [];
-
+    
     for (let i = 0; i < querySnap.docs.length; i++) {
-      let evt = await firestore
-        .collection('archives')
-        .doc(querySnap.docs[i].data().archiveId)
+      let evet = await firestore
+        .collection('Archives')
+        .doc(querySnap.docs[i].id)
         .get();
-      archives.push({ ...evt.data(), id: evt.id });
+      archives.push({ ...evet.data(), id: evet.id });
     }
-
+    
     dispatch({ type: FETCH_ARCHIVES, payload: { archives } });
 
     dispatch(asyncActionFinish());

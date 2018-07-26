@@ -104,8 +104,7 @@ class ArchiveForm extends Component {
       pristine,
       archive,
       publishToggle,
-      clean,
-      files
+      clean
     } = this.props;
     return (
       <Grid>
@@ -142,6 +141,26 @@ class ArchiveForm extends Component {
                   placeholder="Publish immediately"
                 />
               )}
+              <section>
+                <div className="dropzone">
+                  <Dropzone onDrop={this.onDrop.bind(this)}>
+                    <p>
+                      Try dropping some files here, or click to select files to
+                      upload.
+                    </p>
+                  </Dropzone>
+                </div>
+                <aside>
+                  <h2>Dropped files</h2>
+                  <ul>
+                    {this.state.files.map(f => (
+                      <li key={f.name}>
+                        {f.name} - {f.size} bytes
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
+              </section>
               <Field
                 name="date"
                 type="text"
@@ -175,26 +194,7 @@ class ArchiveForm extends Component {
                 />
               )}
 
-              <section>
-                <div className="dropzone">
-                  <Dropzone onDrop={this.onDrop.bind(this)}>
-                    <p>
-                      Try dropping some files here, or click to select files to
-                      upload.
-                    </p>
-                  </Dropzone>
-                </div>
-                <aside>
-                  <h2>Dropped files</h2>
-                  <ul>
-                    {this.state.files.map(f => (
-                      <li key={f.name}>
-                        {f.name} - {f.size} bytes
-                      </li>
-                    ))}
-                  </ul>
-                </aside>
-              </section>
+              
             </Form>
           </Segment>
         </Grid.Column>
