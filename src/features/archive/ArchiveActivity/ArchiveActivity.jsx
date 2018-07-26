@@ -10,7 +10,7 @@ const ArchiveActivity = ({activities, contextRef}) => {
       <Segment attached>
         <Feed>
           {activities && activities.map((activity_arc) => (
-            <ArchiveActivityItem key={activity_arc.id} activity_arc={activity_arc}/>
+            <ArchiveActivityItem key={activity_arc.id} activity={activity_arc}/>
           ))}
         </Feed>
       </Segment>

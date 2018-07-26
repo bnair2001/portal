@@ -13,6 +13,8 @@ import ArchiveComponent from '../../features/archive/ArchiveDashboard/ArchiveDas
 import ModalManager from '../../features/modals/ModalManager';
 import ArchiveDetailed from '../../features/archive/ArchiveDetailed/ArchiveDetailedPage';
 import ArchiveForm from '../../features/archive/ArchiveForm/ArchiveForm';
+import { UserIsAuthenticated } from "../../features/auth/authWrapper";
+
 
 class App extends Component {
   render() {
@@ -30,17 +32,21 @@ class App extends Component {
               <NavBar />
               <Container className="main">
                 <Switch>
-                  <Route path="/events" component={EventDashboard} />
-                  <Route path="/archives" component={ArchiveComponent} />
-                  <Route path="/archive/:id" component={ArchiveDetailed} />
-                  <Route path="/createArchive" component={ArchiveForm} />
+                <Route path="/events" component={EventDashboard} />
+
                   <Route path="/event/:id" component={EventDetailedPage} />
-                  <Route path="/manageEvent/:id" component={EventForm} />
-                  <Route path="/manageArchive/:id" component={ArchiveForm} />
-                  <Route path="/people" component={PeopleDashboard} />
-                  <Route path="/profile/:id" component={UserDetailedPage} />
-                  <Route path="/settings" component={SettingsDashboard} />
-                  <Route path="/createEvent" component={EventForm} />
+                  <Route path="/manage/:id" component={UserIsAuthenticated(EventForm)} />
+                  <Route path="/people" component={UserIsAuthenticated(PeopleDashboard)} />
+                  <Route path="/profile/:id" component={UserIsAuthenticated(UserDetailedPage)} />
+                  <Route path="/settings" component={UserIsAuthenticated(SettingsDashboard)} />
+                  <Route path="/createEvent" component={UserIsAuthenticated(EventForm)} />
+                  
+                  <Route path="/archives" component={UserIsAuthenticated(ArchiveComponent)} />
+                  <Route path="/archive/:id" component={UserIsAuthenticated(ArchiveDetailed)} />
+                  <Route path="/createArchive" component={UserIsAuthenticated(ArchiveForm)} />              
+                  <Route path="/manageArchive/:id" component={UserIsAuthenticated(ArchiveForm)} />
+                  
+
                 </Switch>
               </Container>
             </div>
