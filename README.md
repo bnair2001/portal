@@ -46,8 +46,8 @@ Then run:
 ```
 npm start
 ```
-And you are good to go!! Feel free to make a pull request.
-
+And you are good to go!!<br /> Feel free to make a pull request.<br />
+[Use this link to set up firebase](https://firebase.google.com/docs/web/setup)
 ### Credits:
 [Bharath Nair](https://github.com/bnair2001), <br />
 [Steve Paul](https://github.com/ST2-EV)
