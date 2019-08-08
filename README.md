@@ -49,7 +49,7 @@ npm start
 And you are good to go!! Feel free to make a pull request.
 
 ### Credits:
-[Bharath Nair](https://github.com/bnair2001)
+[Bharath Nair](https://github.com/bnair2001), <br />
 [Steve Paul](https://github.com/ST2-EV)
 
 
